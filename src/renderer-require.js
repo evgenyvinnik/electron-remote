@@ -1,4 +1,5 @@
 import path from 'path';
+import url from 'url'
 import {fromRemoteWindow} from './remote-event';
 
 import {AsyncSubject} from 'rxjs/AsyncSubject';
@@ -53,8 +54,12 @@ export async function rendererRequireDirect(modulePath) {
   bw.openDevTools();
   */
 
-  let preloadFile = path.join(__dirname, 'renderer-require-preload.html');
-  bw.loadURL(`file:///${preloadFile}?module=${encodeURIComponent(fullPath)}`);
+  let preloadFileUri = url.format({
+    pathname: path.join(__dirname, 'renderer-require-preload.html'),
+    protocol: 'file',
+    slashes: true
+  })
+  bw.loadURL(`${preloadFileUri}?module=${encodeURIComponent(fullPath)}`);
   await ready;
 
   let fail = await executeJavaScriptMethod(bw, 'window.moduleLoadFailure');
