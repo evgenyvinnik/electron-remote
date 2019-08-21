@@ -40,7 +40,15 @@ const BrowserWindow = process.type === 'renderer' ?
  *                              the window.
  */
 export async function rendererRequireDirect(modulePath) {
-  let bw = new BrowserWindow({width: 500, height: 500, show: false});
+  let bw = new BrowserWindow({
+    width: 500,
+    height: 500,
+    show: false,
+    webPreferences: {
+      nodeIntegration: false,
+      preload: path.join(__dirname, 'renderer-require-preload.js')
+    }
+  });
   let fullPath = require.resolve(modulePath);
 
   let ready = Observable.merge(
@@ -49,17 +57,19 @@ export async function rendererRequireDirect(modulePath) {
       .mergeMap(([, , errMsg]) => Observable.throw(new Error(errMsg)))
     ).take(1).toPromise();
 
-  /* Uncomment for debugging!
-  bw.show();
-  bw.openDevTools();
-  */
+  // Uncomment for debugging!
+  // bw.show();
+  // bw.openDevTools();
 
   let preloadFileUri = url.format({
     pathname: path.join(__dirname, 'renderer-require-preload.html'),
     protocol: 'file',
-    slashes: true
+    slashes: true,
+    query: {
+      module: fullPath
+    }
   })
-  bw.loadURL(`${preloadFileUri}?module=${encodeURIComponent(fullPath)}`);
+  bw.loadURL(preloadFileUri);
   await ready;
 
   let fail = await executeJavaScriptMethod(bw, 'window.moduleLoadFailure');

@@ -1,11 +1,11 @@
-import {rendererRequireDirect, requireTaskPool} from '../src/renderer-require';
+import {rendererRequireDirect, requireTaskPool} from '../lib/renderer-require';
 
 describe('the requireTaskPool method', function() {
   this.timeout(10*1000);
 
   it('can make a bunch of requests at once', async function() {
     const { getJSON } = requireTaskPool(
-      require.resolve('../src/remote-ajax'),
+      require.resolve('../lib/remote-ajax'),
       10,     // Allow 10 windows open at a time
       200);   // Close idle windows after 500ms
 
@@ -24,7 +24,7 @@ describe('the rendererRequireDirect method', function() {
   this.timeout(10*1000);
 
   it('makes a request using remote-ajax', async function() {
-    let { module, unsubscribe } = await rendererRequireDirect(require.resolve('../src/remote-ajax'));
+    let { module, unsubscribe } = await rendererRequireDirect(require.resolve('../lib/remote-ajax'));
 
     try {
       let result = await module.getJSON('https://httpbin.org/get');
@@ -35,7 +35,7 @@ describe('the rendererRequireDirect method', function() {
   });
 
   it('marshals errors correctly', async function() {
-    let { module, unsubscribe } = await rendererRequireDirect(require.resolve('../src/remote-ajax'));
+    let { module, unsubscribe } = await rendererRequireDirect(require.resolve('../lib/remote-ajax'));
 
     let shouldDie = true;
     try {

@@ -1,4 +1,4 @@
-import {RecursiveProxyHandler} from '../src/execute-js-func';
+import {RecursiveProxyHandler} from '../lib/execute-js-func';
 
 describe('RecursiveProxyHandler', function() {
   it('should let me apply a function', function() {
