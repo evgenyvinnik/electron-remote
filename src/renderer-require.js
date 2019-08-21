@@ -56,9 +56,12 @@ export async function rendererRequireDirect(modulePath) {
   let preloadFileUri = url.format({
     pathname: path.join(__dirname, 'renderer-require-preload.html'),
     protocol: 'file',
-    slashes: true
+    slashes: true,
+    query: {
+      module: fullPath
+    }
   })
-  bw.loadURL(`${preloadFileUri}?module=${encodeURIComponent(fullPath)}`);
+  bw.loadURL(preloadFileUri);
   await ready;
 
   let fail = await executeJavaScriptMethod(bw, 'window.moduleLoadFailure');
