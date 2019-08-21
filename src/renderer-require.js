@@ -49,10 +49,9 @@ export async function rendererRequireDirect(modulePath) {
       .mergeMap(([, , errMsg]) => Observable.throw(new Error(errMsg)))
     ).take(1).toPromise();
 
-  /* Uncomment for debugging!
-  bw.show();
-  bw.openDevTools();
-  */
+  // Uncomment for debugging!
+  // bw.show();
+  // bw.openDevTools();
 
   let preloadFileUri = url.format({
     pathname: path.join(__dirname, 'renderer-require-preload.html'),
