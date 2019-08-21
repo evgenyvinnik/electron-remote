@@ -1,5 +1,5 @@
 import {remote} from 'electron';
-import {fromRemoteWindow} from '../src/remote-event';
+import {fromRemoteWindow} from '../lib/remote-event';
 
 const {BrowserWindow} = remote;
 

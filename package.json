@@ -4,10 +4,12 @@
   "description": "Execute JavaScript in remote Electron processes, but more betterer",
   "scripts": {
     "doc": "esdoc -c ./esdoc.json",
-    "compile": "git clean -xdf ./lib && babel -d lib/ src/ && cp ./src/*.html ./lib/",
+    "compile": "npm run compile-src && npm run compile-test",
+    "compile-src": "git clean -xdf ./lib && babel -d lib/ src/ && cp ./src/*.html ./lib/",
+    "compile-test": "git clean -xdf ./test-out && babel -d test-out/ test/",
     "prepublish": "npm run compile",
-    "test-renderer": "electron-mocha --renderer --require ./test/support.js ./test",
-    "test-browser": "electron-mocha --require ./test/support.js ./test/renderer-require",
+    "test-renderer": "electron-mocha --renderer --require ./test-out/support.js ./test-out",
+    "test-browser": "electron-mocha --require ./test-out/support.js ./test-out/renderer-require",
     "test": "npm run test-renderer && npm run test-browser",
     "node": "cross-env ELECTRON_RUN_AS_NODE=1 ./node_modules/electron-prebuilt-compile/node_modules/.bin/electron"
   },
