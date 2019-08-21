@@ -40,7 +40,15 @@ const BrowserWindow = process.type === 'renderer' ?
  *                              the window.
  */
 export async function rendererRequireDirect(modulePath) {
-  let bw = new BrowserWindow({width: 500, height: 500, show: false});
+  let bw = new BrowserWindow({
+    width: 500,
+    height: 500,
+    show: false,
+    webPreferences: {
+      nodeIntegration: false,
+      preload: path.join(__dirname, 'renderer-require-preload.js')
+    }
+  });
   let fullPath = require.resolve(modulePath);
 
   let ready = Observable.merge(
