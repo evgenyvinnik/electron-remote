@@ -20,9 +20,6 @@ let isBrowser = (process.type === 'browser');
 let ipc = require('electron')[isBrowser ? 'ipcMain' : 'ipcRenderer'];
 
 const d = require('debug')('electron-remote:execute-js-func');
-const BrowserWindow = isBrowser ?
-  require('electron').BrowserWindow :
-  require('electron').remote.BrowserWindow;
 
 let nextId = 1;
 const hashIds = new Hashids();
@@ -178,6 +175,10 @@ function findTargetFromParentInfo(parentInfo=window.parentInfo) {
   }
 
   if ('browserWindowId' in parentInfo) {
+    const BrowserWindow = isBrowser ?
+      require('electron').BrowserWindow :
+      require('electron').remote.BrowserWindow;
+
     return BrowserWindow.fromId(parentInfo.browserWindowId);
   }
 

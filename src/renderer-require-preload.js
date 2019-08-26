@@ -3,10 +3,9 @@ import url from 'url';
 
 initializeEvalHandler();
 
-url.parse(window.location.href);
-let escapedModule = url.parse(window.location.href).query.split('=')[1];
 try {
-  window.requiredModule = require(decodeURIComponent(escapedModule));
+  const fullPath = url.parse(window.location.href, true).query.module;
+  window.requiredModule = require(fullPath);
 } catch (e) {
   window.moduleLoadFailure = e;
 }
